@@ -35,7 +35,7 @@ interface AggregatorV3Interface {
 }
 
 contract FundMe {
-    uint256 public minUsd = 5;
+    uint256 public minUsd = 5e18;
 
     function fund() public payable {
         require(msg.value >= minUsd, "didnt send enough eth");
@@ -49,6 +49,12 @@ contract FundMe {
         );
         (, int256 price, , , ) = priceFeed.latestRoundData();
         return uint256(price * 1e10);
+    }
+
+    function getCon(uint256 ethAmount) public view returns(uint256){
+        uint256 ethPrice = getPrice();
+        uint256 ethAmountUsd = (ethPrice * ethAmount) / 1e18;
+        return ethAmountUsd;
     }
 
     function getVersion() public view returns (uint256) {
